@@ -34,40 +34,20 @@ function getValue() {
     }
   }
   if (isValid) {
+    luongTong = nhanVien.tongLuong();
+    ketQuaXepLoai = nhanVien.xepLoai();
     return nhanVien;
   }
 }
 
 // Hiển thị input lên giao diện
-
 function renderArrNhanVien(arr = arrNhanVien) {
   let content = "";
   for (let nhanVien of arr) {
     let newArrNhanVien = new NhanVien();
     Object.assign(newArrNhanVien, nhanVien);
-    let { tknv, name, email, datepicker, chucvu, luongCB, gioLam } =
+    let { tknv, name, email, datepicker, chucvu, ketQuaXepLoai, luongTong } =
       newArrNhanVien;
-
-    // Tính tổng lương
-    let tongLuong = 0;
-    if (chucvu == "Giám đốc") {
-      tongLuong = luongCB * 3;
-    } else if (chucvu == "Trưởng phòng") {
-      tongLuong = luongCB * 2;
-    } else if (chucvu == "Nhân viên") {
-      tongLuong = luongCB * 1;
-    }
-    // Xếp loại dựa theo giờ làm
-    let xepLoai = "";
-    if (gioLam < 160) {
-      xepLoai = "Trung bình";
-    } else if (gioLam >= 160 && gioLam < 176) {
-      xepLoai = "Khá";
-    } else if (gioLam >= 176 && gioLam < 192) {
-      xepLoai = "Giỏi";
-    } else {
-      xepLoai = "Xuất sắc";
-    }
     content += `
     <tr>
     <td>${tknv}</td>
@@ -75,11 +55,11 @@ function renderArrNhanVien(arr = arrNhanVien) {
     <td>${email}</td>
     <td>${datepicker}</td>
     <td>${chucvu}</td>
-    <td>${tongLuong.toLocaleString("vi", {
+    <td>${luongTong.toLocaleString("vi", {
       currency: "VND",
       style: "currency",
     })}</td>
-    <td>${xepLoai}</td>
+    <td>${ketQuaXepLoai}</td>
     <td>
     <button onclick="deleteNhanVien('${tknv}')" class="btn btn-danger">Xóa</button>
     <button onclick="getInfoNhanVien('${tknv}')" data-toggle="modal" data-target="#myModal" class="btn btn-warning">Sửa</button>
@@ -143,6 +123,7 @@ function getInfoNhanVien(accNV) {
     for (let field of arrField) {
       field.value = nhanVien[field.id];
     }
+    document.getElementById("tknv").readOnly = true;
   }
 }
 
@@ -153,6 +134,7 @@ function updateNhanVien() {
   if (index != -1) {
     arrNhanVien[index] = nhanVien;
     renderSaveReset();
+    document.getElementById("tknv").readOnly = false;
   }
 }
 
@@ -164,13 +146,23 @@ function searchNhanVien() {
   let newKeyWord = removeVietnameseTones(
     event.target.value.toLowerCase().trim()
   );
+
   let arrNhanVienFilter = arrNhanVien.filter((item) => {
-    let newTenNhanVien = removeVietnameseTones(item.tknv.toLowerCase().trim());
-    console.log(arrNhanVien);
+    let newTenNhanVien = removeVietnameseTones(
+      item.ketQuaXepLoai.toLowerCase().trim()
+    );
+
     return newTenNhanVien.includes(newKeyWord);
   });
+
   renderArrNhanVien(arrNhanVienFilter);
 }
 
 // Chạy hàm search
 document.getElementById("searchName").oninput = searchNhanVien;
+
+// Chạy hàm reset cho nút thêm (bấm nút sửa xong bấm nút thêm nó vẫn hiện thông tin)
+document.getElementById("btnThem").onclick = function () {
+  document.getElementById("tknv").readOnly = false;
+  document.getElementById("formModal").reset();
+};

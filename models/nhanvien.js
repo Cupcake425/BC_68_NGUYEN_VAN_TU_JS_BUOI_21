@@ -8,36 +8,33 @@ class NhanVien {
     this.luongCB = "";
     this.chucvu = "";
     this.gioLam = "";
+    this.ketQuaXepLoai = "";
+    this.luongTong = "";
   }
 
   // Tính tổng tiền lương
-  // tongLuong = function () {
-  //   let tongLuong = 0;
-  //   if (this.chucvu.value == "sep") {
-  //     tongLuong = this.luongCB * 3;
-  //   } else if (this.chucvu.value == "truongPhong") {
-  //     tongLuong = this.luongCB * 2;
-  //   } else if (this.chucvu.value == "nhanVien") {
-  //     tongLuong = this.luongCB;
-  //   } else {
-  //     tongLuong = 0;
-  //   }
-  //   return tongLuong;
-  // };
-  // test = function () {
-  //   console.log("test");
-  // };
-  // xepLoai() {
-  //   let ketQua = "";
-  //   if (this.gioLam < 160) {
-  //     ketQua = "Trung bình";
-  //   } else if (this.gioLam >= 160 && this.gioLam < 176) {
-  //     ketQua = "Khá";
-  //   } else if (this.gioLam >= 176 && this.gioLam < 192) {
-  //     ketQua = "Giỏi";
-  //   } else {
-  //     ketQua = "Xuất sắc";
-  //   }
-  //   return ketQua;
-  // }
+  tongLuong() {
+    if (this.chucvu == "Giám đốc") {
+      this.luongTong = this.luongCB * 3;
+    } else if (this.chucvu == "Trưởng phòng") {
+      this.luongTong = this.luongCB * 2;
+    } else if (this.chucvu == "Nhân viên") {
+      this.luongTong = this.luongCB * 1;
+    }
+    return this.luongTong * 1;
+  }
+
+  // Xếp loại nhân viên
+  xepLoai() {
+    if (this.gioLam < 160) {
+      this.ketQuaXepLoai = "Trung bình";
+    } else if (this.gioLam >= 160 && this.gioLam < 176) {
+      this.ketQuaXepLoai = "Khá";
+    } else if (this.gioLam >= 176 && this.gioLam < 192) {
+      this.ketQuaXepLoai = "Giỏi";
+    } else {
+      this.ketQuaXepLoai = "Xuất sắc";
+    }
+    return this.ketQuaXepLoai;
+  }
 }
